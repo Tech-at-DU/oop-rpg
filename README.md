@@ -1,2 +1,3 @@
-# oop-rpg
-Object Oriented RPG Game
+#  Object Oriented RPG Game
+
+Build an object oriented RPG Game in Swift.
