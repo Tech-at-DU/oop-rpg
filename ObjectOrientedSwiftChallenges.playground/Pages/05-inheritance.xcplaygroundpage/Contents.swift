@@ -1,125 +1,117 @@
-//: Playground - noun: a place where people can play
+/*:
+
+# Arcane Quest – Page 6
+
+### Overriding Protocol Extension Defaults
+
+Protocol extensions give you one shared implementation, *but individual
+classes can still specialize* when needed. Priests, for example, use
+their magic to **heal** rather than attack. In this lesson you’ll learn
+how method resolution works and how to override a default provided by a
+protocol extension.
+
+## What you’ll practice
+
+* Revisiting the default implementations from last page
+* Overriding a protocol‐extension method in a concrete class
+* Understanding dynamic vs. static dispatch in Swift (glance)
+*/
 
 import Foundation
 
-// Define some protocols
-
+/* --------------------------------------------------
+MARK: 1. Ability Protocols & Default Behavior
+-------------------------------------------------- */
 protocol Casts {
-    var name: String {get}
-    func castSpell()
+  var name: String { get }
+  func castSpell()
 }
 
 protocol Fights {
-    var name: String {get}
-    func melee()
+  var name: String { get }
+  func melee()
 }
 
-// Define some protocol extensions. These define default implementations for 
-// methods defined in the protocol. Notice I need to add name as a property
-// to the protocol since name appears in the extension!
-
 extension Casts {
-    func castSpell() {
-        print("\(name) Casts spell")
-    }
+  func castSpell() {
+    print("(name) casts a dazzling spell!")
+  }
 }
 
 extension Fights {
-    func melee() {
-        print("\(name) Attacks with Sword!")
-    }
+  func melee() {
+    print("(name) attacks with sword!")
+  }
 }
 
-// Define a base class
-
+/* --------------------------------------------------
+MARK: 2. Base Class
+-------------------------------------------------- */
 class Player {
-    var name: String
-    var hitPoints: Int = 0
-    
-    init(name: String) {
-        self.name = name
-    }
-    
-    func adventure() {
-        print("\(name) goes adventuring!")
-    }
+  var name: String
+  var hitPoints: Int
+
+  init(name: String, hitPoints: Int = 10) {
+      self.name = name
+      self.hitPoints = hitPoints
+  }
 }
 
-
-// Subclasses Player and implements Fights
-
+/* --------------------------------------------------
+MARK: 3. Concrete Classes (no duplicate methods!)
+ -------------------------------------------------- */
 class Fighter: Player, Fights {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 8
-    }
+  init(name: String) { super.init(name: name, hitPoints: 8) }
 }
 
-
-// Sub classes player and implements Casts
 class Wizard: Player, Casts {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 4
-    }
+  init(name: String) { super.init(name: name, hitPoints: 4) }
 }
 
 class Priest: Player, Casts {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
-    
+  init(name: String) { super.init(name: name, hitPoints: 6) }
+
+  // TODO: Override the default castSpell() so Priests heal instead.
+  // Expected output: "<name> heals the party!"
+
 }
 
-
-// Sub classes player and implements both Fights and Casts
-
-class Elf: Player, Fights, Casts {
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
+class Elf: Player, Casts, Fights {
+  init(name: String) { super.init(name: name, hitPoints: 6) }
 }
 
+/* --------------------------------------------------
+MARK: 4. Quick Test – Uncomment after you implement.
+-------------------------------------------------- */
+/*
+let clancy = Priest(name: "Clancy")
+clancy.castSpell()   // ➜ Clancy heals the party!
 
-// Wizard adds a new method
-var mephisto = Wizard(name: "Mephisto")
-mephisto.castSpell()
+let arya = Elf(name: "Arya")
+arya.melee()         // ➜ Arya attacks with sword!
+arya.castSpell()     // ➜ Arya casts a dazzling spell!
+*/
 
-// Priest duplicates functionality
-var clancy = Priest(name: "Clancy")
-clancy.castSpell()
+/* --------------------------------------------------
+🧠 Behind the scenes – Method Dispatch
+• The compiler picks the *most specific* implementation available.
+• If a concrete class provides its own method, it wins over the
+protocol-extension default.
+• If not, the default extension method is used.
+-------------------------------------------------- */
 
-// Fighter
-var frank = Fighter(name: "Frank")
-frank.melee()
+/* --------------------------------------------------
+⭐ Stretch Challenge
 
-var elrond = Elf(name: "Elrond")
-elrond.castSpell()
-elrond.melee()
-
-
-// This is working well there is one problem. When Priests cast a spell it heals the party. 
-
-// - Challenge: 
-
-// When a Priest casts a spell the message displayed should say: "\(name) heals the party!"
-// Override the default implementation of castSpell() in the Priest class to make this
-// happen. 
-
+1. Override `melee()` in Elf so it prints
+   "<name> fires an arrow!". Which implementation will run on an Elf
+   referenced as `Fights`? Try:
+   let legolas: Fights = Elf(name: "Legolas")
+   legolas.melee()  // what prints?
+2. Discuss: Why does Swift pick that implementation? (Hint: static vs
+   dynamic dispatch rules for protocol extensions.)
+   -------------------------------------------------- */
 
 
 
 //: [Next](@next)
-
-
-
-

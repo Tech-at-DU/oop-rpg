@@ -1,57 +1,94 @@
-import Foundation
 
-// Define a base class for our new RPG app.
+/*:
+ # Arcane Quest – Page 2
+ ### Arcane & Divine Heroes
+
+ Your prototype now supports Fighters, but the realm also teems with
+ spell-casters. You must extend the character engine with **Wizards** and
+ **Priests**.
+
+ ## What you’ll practice
+ * Inheritance review
+ * Custom initializers & subclass-specific defaults
+ * Adding new instance methods (`castSpell()`)
+ */
+
+/* ---------------------------------------------------
+   Pre-existing code from Page 1
+   (Copy or ensure these definitions are accessible.)
+ --------------------------------------------------- */
 
 class Player {
-    var name: String    // All Players have name
-    var hitPoints: Int  // and hitPoints
+    var name: String
+    var hitPoints: Int
     
-    // Initialize your class.
-    init(name: String) {
+    init(name: String, hitPoints: Int = 10) {
         self.name = name
-        self.hitPoints = 0
+        self.hitPoints = hitPoints
     }
     
     func adventure() {
-        print("\(name) Goes adventuring!")
+        print("\(name) goes adventuring!")
     }
 }
 
-// The game is more fun with different character classes. 
-// Make a fighter.
-
-
-// Fighter inherits all methods and properties from Player
 class Fighter: Player {
-    // Override the initializer
-    override init(name: String) {
-        super.init(name: name)
-        // Override the default
-        self.hitPoints = 8 // Fighters have 8 hit points
+    init(name: String) {
+        super.init(name: name, hitPoints: 8)
     }
     
-    // Fighters melee
     func melee() {
         print("\(name) attacks with sword!")
     }
 }
 
-// frank calls a method from it's super class.
-var frank = Fighter(name: "Frank")
-frank.adventure()
-frank.melee()
+/* ---------------------------------------------------
+   MARK: 1. Wizard Subclass
+   TODO:
+   • Subclass Player.
+   • Wizards start with 4 hitPoints.
+   • Add method castSpell() that prints
+     "<name> casts Fireball!".
+ --------------------------------------------------- */
 
-// - Challenge:
+class Wizard: /* 🛠 your superclass */ {
+    // 🛠️ Your code here
+}
 
-// Add two new classes: Wizard and Priest. Both of these class will inherit from Player.
+/* ---------------------------------------------------
+   MARK: 2. Priest Subclass
+   TODO:
+   • Subclass Player.
+   • Priests start with 6 hitPoints.
+   • Add method castSpell() that prints
+     "<name> casts Heal!".
+ --------------------------------------------------- */
 
-// - Challenge: 
+class Priest: /* 🛠 your superclass */ {
+    // 🛠️ Your code here
+}
 
-// The Wizard and Priest cast spells instead of melee. Give them a castSpell() method.
+/* ---------------------------------------------------
+   MARK: 3. Quick Test – Uncomment after you implement
+ --------------------------------------------------- */
+/*
+let gandalf = Wizard(name: "Gandalf")
+gandalf.adventure()        // ➜ Gandalf goes adventuring!
+print(gandalf.hitPoints)   // ➜ 4
+gandalf.castSpell()        // ➜ Gandalf casts Fireball!
 
-// - Challenge: 
+let alara = Priest(name: "Alara")
+print(alara.hitPoints)     // ➜ 6
+alara.castSpell()          // ➜ Alara casts Heal!
+*/
 
-// Fighters have 8 hit points, Wizards should have 4, Priests should have 6.
+/* ---------------------------------------------------
+   ⭐ Stretch Challenge (optional)
+   1. Give Wizard an extra property `mana` (default 20) and
+      a method `meditate()` that restores 5 mana.
+   2. Give Priest a property `faith` (default 15) and
+      override castSpell() so it consumes 3 faith each time.
+ --------------------------------------------------- */
 
 
 //: [Next](@next)

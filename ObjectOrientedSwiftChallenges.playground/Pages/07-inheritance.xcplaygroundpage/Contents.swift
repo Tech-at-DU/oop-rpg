@@ -1,124 +1,104 @@
-//: Playground - noun: a place where people can play
+/*:
+
+# Arcane Quest – Page 8
+
+### Using Subclass State Inside an Overridden Protocol Method
+
+In the last lesson you added a non‑optional `battleCry` property to
+**Fighter**. Right now `melee()` still calls the *default* implementation
+from the `Fights` protocol extension, so the battle‑cry never appears.
+Your job: **override** `melee()` in Fighter so it incorporates the cry.
+
+## What you’ll practice
+
+* Referencing subclass‑specific state (`battleCry`) in an override
+* Deciding when to call `super` vs. replace behavior completely
+  */
 
 import Foundation
 
-// Define some protocols
-
+/* --------------------------------------------------
+MARK: 1. Ability Protocols & Default Behavior (given)
+-------------------------------------------------- */
 protocol Casts {
-    var name: String {get}
-    func castSpell()
+  var name: String { get }
+  func castSpell()
 }
 
 protocol Fights {
-    var name: String {get}
-    func melee()
+  var name: String { get }
+  func melee()
 }
 
-// Define some protocol extensions.
-
 extension Casts {
-    func castSpell() {
-        print("\(name) Casts spell")
-    }
+  func castSpell() { print("(name) casts a dazzling spell!") }
 }
 
 extension Fights {
-    func melee() {
-        print("\(name) Attacks with Sword!")
-    }
+  func melee() { print("(name) attacks with sword!") }
 }
 
-// Define a base class
-
+/* --------------------------------------------------
+MARK: 2. Base Class (unchanged)
+-------------------------------------------------- */
 class Player {
-    var name: String
-    var hitPoints: Int = 0
-    
-    init(name: String) {
-        self.name = name
-    }
-    
-    func adventure() {
-        print("\(name) goes adventuring!")
-    }
+  var name: String
+  var hitPoints: Int
+
+  init(name: String, hitPoints: Int = 10) {
+      self.name = name
+      self.hitPoints = hitPoints
+  }
+
 }
 
-
-class Fighter: Player, Fights {
-    
-    var battleCry: String
-    
-    init(name: String, battleCry: String = "") {
-        self.battleCry = battleCry
-        
-        super.init(name: name)
-        
-        hitPoints = 8
-    }
-}
-
-
-// Sub classes player and implements Casts
+/* --------------------------------------------------
+MARK: 3. Subclasses (Wizard & Priest for context)
+-------------------------------------------------- */
 class Wizard: Player, Casts {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 4
-    }
+  init(name: String) { super.init(name: name, hitPoints: 4) }
 }
-
-// Sub classes player and implements Casts.
 
 class Priest: Player, Casts {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
-    
-    // Priests cast spells but they are different from Wizard spells!
-    func castSpell() {
-        print("\(name) heals the party!")
-    }
-    
+  init(name: String) { super.init(name: name, hitPoints: 6) }
+  func castSpell() { print("(name) heals the party!") }
 }
 
-
-// Sub classes player and implements both Fights and Casts
-
-class Elf: Player, Fights, Casts {
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
+class Elf: Player, Casts, Fights {
+  init(name: String) { super.init(name: name, hitPoints: 6) }
 }
 
-// Wizard adds a new method
-var mephisto = Wizard(name: "Mephisto")
-mephisto.castSpell()
+/* --------------------------------------------------
+MARK: 4. TODO – Upgrade Fighter to use battleCry
+Tasks:
 
-// Priest duplicates functionality
-var clancy = Priest(name: "Clancy")
-clancy.castSpell()
+1. Keep stored property `battleCry: String` (no default at declaration).
+2. `init(name:battleCry:)` should default to "Huzzah!".
+3. Override `melee()` so output is:
+   "<battleCry> — <name> attacks with sword!"
+   (Hint: don't call `super.melee()`; replace entirely.)
+   -------------------------------------------------- */
+   class Fighter: Player, Fights {
+   // 🛠️ Your code here
+   }
 
-// Fighter
-var frank = Fighter(name: "Frank")
-frank.melee()
+/* --------------------------------------------------
+MARK: 5. Quick Test – Uncomment after you implement
+-------------------------------------------------- */
+/*
+let conan = Fighter(name: "Conan")
+conan.melee()
+// ➜ Huzzah! — Conan attacks with sword!
 
-var elrond = Elf(name: "Elrond")
-elrond.castSpell()
-elrond.melee()
+let xena = Fighter(name: "Xena", battleCry: "Ayiyiyiyi!")
+xena.melee()
+// ➜ Ayiyiyiyi! — Xena attacks with sword!
+\*/
 
-var george = Fighter(name: "George", battleCry: "Arrr!")
-george.melee()
+/* --------------------------------------------------
+⭐ Stretch Challenge
 
-// Now that the fighter has a battle cry they should use it when they attack.
-
-// - Challenge: 
-
-// The fighter should use the battleCry when the melee() method is called. 
-
-
+1. Refactor the `battleCry` output into the `Fights` protocol extension
+   using default implementation with `Self: Fighter` constraint.
+2. What happens to Elf’s melee afterwards? Explain why.
+   -------------------------------------------------- */

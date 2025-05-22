@@ -1,134 +1,111 @@
-//: Playground - noun: a place where people can play
+/*:
+
+# Arcane Quest – Page 5
+
+### Protocol *Extensions*:  Write Once, Reuse Everywhere
+
+You’ve added `Casts` and `Fights` protocols, but every conforming class
+still duplicates the same method bodies. Swift’s **protocol extensions**
+let you write a *default implementation* once and share it with every
+adopter—no inheritance needed.
+
+## What you’ll practice
+
+* Extending a protocol to add default behavior
+* `where Self:` constraints so the extension can access properties of
+  conforming classes
+* Removing redundant code from subclasses
+
+> **Reminder**: An extension adds methods *outside* the original type
+> declaration—perfect for retro‑fitting functionality.
+> \*/
 
 import Foundation
 
-// Define what each class does. 
-// Casters cast, Fighters melee.
-
-protocol Casts {
-    func castSpell()
+/* --------------------------------------------------
+MARK: 0. Ability Protocols (from previous lesson)
+-------------------------------------------------- */
+protocol Casts {             // requires castSpell()
+  func castSpell()
 }
 
-protocol Fights {
-    func melee()
+protocol Fights {            // requires melee()
+  func melee()
 }
 
-
-// Player defines the default traits shared by all classes
-
+/* --------------------------------------------------
+MARK: 1. Player Base Class (unchanged)
+-------------------------------------------------- */
 class Player {
-    var name: String
-    var hitPoints: Int = 0
-    
-    init(name: String) {
-        self.name = name
-    }
-    
-    func adventure() {
-        print("\(name) goes adventuring!")
-    }
+  var name: String
+  var hitPoints: Int
+
+  init(name: String, hitPoints: Int = 10) {
+      self.name = name
+      self.hitPoints = hitPoints
+  }
+
+  func adventure() { print("\(name) goes adventuring!") }
+
 }
 
-
-// Subclasses Player and implements Fights
-
+/* --------------------------------------------------
+MARK: 2. Classes – Now *Without* Duplicate Methods
+TODO:
+• Remove all melee()/castSpell() bodies — they’ll come from the
+protocol extensions.
+-------------------------------------------------- */
 class Fighter: Player, Fights {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 8
-    }
-    
-    func melee() {
-        print("\(name) Attacks with Sword!")
-    }
+  init(name: String) { super.init(name: name, hitPoints: 8) }
 }
 
-
-// Sub classes player and implements Casts
 class Wizard: Player, Casts {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 4
-    }
-    
-    func castSpell() {
-        print("\(name) Casts spell")
-    }
+  init(name: String) { super.init(name: name, hitPoints: 4) }
 }
-
-// Sub classes player and implements Casts
 
 class Priest: Player, Casts {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
-    
-    func castSpell() {
-        print("\(name) Casts spell")
-    }
-    
+  init(name: String) { super.init(name: name, hitPoints: 6) }
 }
-
-
-// Sub classes player and implements both Fights and Casts
 
 class Elf: Player, Fights, Casts {
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
-    
-    func castSpell() {
-        print("\(name) Casts spell")
-    }
-    
-    func melee() {
-        print("\(name) Attacks with Sword!")
-    }
+  init(name: String) { super.init(name: name, hitPoints: 6) }
 }
 
-// Wizard adds a new method
-var mephisto = Wizard(name: "Mephisto")
-mephisto.castSpell()
+/* --------------------------------------------------
+MARK: 3. Protocol Extensions (write the code once!)
+TODO:
+• Extend Fights *where Self: Player* and add a default melee() that
+prints "<name> attacks with sword!".
+• Extend Casts *where Self: Player* and add a default castSpell() that
+prints "<name> casts a dazzling spell!".
+-------------------------------------------------- */
+// 🛠️ Your protocol extensions here
 
-// Priest duplicates functionality
-var clancy = Priest(name: "Clancy")
-clancy.castSpell()
+/* --------------------------------------------------
+MARK: 4. Quick Test – Uncomment after you implement
+-------------------------------------------------- */
+/*
+let arwen = Elf(name: "Arwen")
+arwen.melee()       // ➜ Arwen attacks with sword!
+arwen.castSpell()   // ➜ Arwen casts a dazzling spell!
 
-// Fighter
-var frank = Fighter(name: "Frank")
-frank.melee()
+let ezra = Priest(name: "Ezra")
+ezra.castSpell()    // ➜ Ezra casts a dazzling spell!
+*/
 
-var elrond = Elf(name: "Elrond")
-elrond.castSpell()
-elrond.melee()
+/* --------------------------------------------------
+⭐ Stretch Challenge (optional)
 
+1. Override `castSpell()` in Wizard to print
+   "<name> conjures a fireball!" (demonstrates how a class can still
+   specialize after inheriting the default).
+2. Give Fights extension a default implementation `powerAttack()` that
+   prints "<name> performs a spinning slash!" and try it on Fighter.
+   -------------------------------------------------- */
 
-// While this works we are still duplicating lots of code. I needed to
-// write the castSpell(), and melee() methods 5 times!
-
-// - Challenge: 
-
-// Write a protocol extension for Fights that defines a default implementation of the
-// melee() method.
-
-// - Challenge: 
-
-// Write a protocol extension for Casts that defines a default implementation of the
-// castSpell() method().
 
 
 
 //: [Next](@next)
-
-
 
 

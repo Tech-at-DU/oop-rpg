@@ -1,122 +1,89 @@
-//: Playground - noun: a place where people can play
+/*:
+
+# Arcane Quest – Page 4
+
+### Protocols: Adding Abilities without Inheritance Hell
+
+Your character hierarchy works, but single inheritance limits you.
+A new **Elf** class must both *fight* and *cast* spells. Instead of
+copying code or building monster subclasses, you’ll attach behavior
+via **protocols**.
+
+## What you’ll practice
+
+* Declaring protocols (Swift’s version of interfaces)
+* Adopting multiple protocols in a class
+* Implementing required methods
+
+> **Note**: We will cover *protocol extensions* next lesson, so this page
+> focuses only on defining protocols and conforming types.
+> */
 
 import Foundation
 
+/* --------------------------------------------------
+Core types from previous pages (provided)
+-------------------------------------------------- */
 class Player {
-    var name: String
-    var hitPoints: Int
-    
-    init(name: String) {
-        self.name = name
-        self.hitPoints = 0
-    }
-    
-    func adventure() {
-        print("\(name) goes adventuring!")
-    }
+var name: String
+var hitPoints: Int
+
+
+init(name: String, hitPoints: Int = 10) {
+    self.name = name
+    self.hitPoints = hitPoints
 }
 
-class Fighter: Player {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 8
-    }
-    
-    func melee() {
-        print("Attacks with Sword!")
-    }
+func adventure() { print("\(name) goes adventuring!") }
+
+
 }
 
-// Spell casters cast spells
+/* --------------------------------------------------
+MARK: 1. Define Ability Protocols
+TODO:
+• Create protocol `Casts` with a method requirement `castSpell()`.
+• Create protocol `Fights` with a method requirement `melee()`.
+-------------------------------------------------- */
+// 🛠️ Your protocols here
 
-class Spellcaster: Player {
-    func castSpell() {
-        print("Do magic stuff")
-    }
-}
+/* --------------------------------------------------
+MARK: 2. Character Classes using Protocols
+TODO:
+• Fighter inherits from Player and adopts Fights.
+• Wizard inherits from Player and adopts Casts.
+• Priest inherits from Player and adopts Casts.
+• Elf inherits from Player and adopts *both* Casts and Fights.
+• Give each class its specific hitPoint default:
+Fighter 8, Wizard 4, Priest 6, Elf 6.
+• Implement required methods inside each class. Use flavor text, e.g.
+"<name> attacks with sword!"  or  "<name> casts Fireball!".
+-------------------------------------------------- */
+// 🛠️ Your classes here
 
-class Wizard: Spellcaster {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 4
-    }
-}
+/* --------------------------------------------------
+MARK: 3. Quick Test – Uncomment after you implement
+-------------------------------------------------- */
+/*
+let arthur = Fighter(name: "Arthur")
+arthur.melee()          // ➜ Arthur attacks with sword!
+print(arthur.hitPoints) // ➜ 8
 
-class Priest: Spellcaster {
-    
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
-    
-}
+let merlin = Wizard(name: "Merlin")
+merlin.castSpell()      // ➜ Merlin casts Fireball!
 
+let elrond = Elf(name: "Elrond")
+elrond.melee()          // ➜ Elrond attacks with sword!
+elrond.castSpell()      // ➜ Elrond casts Fireball!
+\*/
 
+/* --------------------------------------------------
+⭐ Stretch Challenge (optional)
 
-// Our game would be more fun with an Elf!
-// Elf can both melee() and castSpell()
-
-class Elf: Player {
-    override init(name: String) {
-        super.init(name: name)
-        
-        hitPoints = 6
-    }
-    
-    // Needs to cast spells and melee...
-}
-
-// Elves cast spells and use swords?
-// We can only inherit from one super class Spellcaster or Fighter, not both.
-
-// We move castSpell and melee methods up to Player.
-//      In this case we end up with classes that have more functionality than they need.
-//      Fighters cast Spells and Wizards melee. 
-// Or, we make another subclass that casts spells and melees. 
-//      In this case we duplicate functionality, more than one class casts spells
-//      and melees.
-
-// This is where inheritance breaks down. Moving all methods up the chain concentrates
-// functionality in base classes. Making more sub classes often has us duplicating
-// functionality.
-
-
-// Wizard adds a new method
-var mephisto = Wizard(name: "Mephisto")
-mephisto.castSpell()
-
-// Priest duplicates functionality
-var clancy = Priest(name: "Clancy")
-clancy.castSpell()
-
-// Fighter
-var frank = Fighter(name: "Frank")
-frank.melee()
-
-var elrond = Elf(name: "Elrond")
-// ????
-
-
-// - Challenge: 
-
-// Define two protocols Casts, and Fights. Casts should define the castSpell() method. 
-//  And, Fights should define the melee() method. 
-
-// - Challenge: 
-
-// Figher should inherit from Player, and adopt the Fights protocol. 
-// Wizard should inherit from Player, and adopt the Casts protocol. 
-// Elf should inherit from Player, and adopt both Casts and Fights. 
-
-// - Challenge: 
-
-// Fighter, Wizard, Priest, and Elf will need to implement the methods declared in the 
-// protocols they adopt. 
+1. Add a protocol `Heals` with method `heal(target: Player)`.
+2. Make Priest conform to `Heals` and implement the method so it
+   increases the target’s hitPoints by 2.
+   -------------------------------------------------- */
 
 
 
