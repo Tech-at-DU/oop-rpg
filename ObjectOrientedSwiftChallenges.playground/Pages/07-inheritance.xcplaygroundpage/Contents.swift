@@ -102,3 +102,6 @@ xena.melee()
    using default implementation with `Self: Fighter` constraint.
 2. What happens to Elf’s melee afterwards? Explain why.
    -------------------------------------------------- */
+
+
+//: [Next](@next)
